@@ -1,7 +1,7 @@
 const AssistantV2 = require('ibm-watson/assistant/v2');
 const { IamAuthenticator } = require('ibm-watson/auth');
 
-const startSession = (message) => {
+const startSession = async (message) => {
     const service = new AssistantV2({
         version: process.env.WATSON_VERSION,
         authenticator: new IamAuthenticator({
@@ -9,6 +9,8 @@ const startSession = (message) => {
         }),
         url: process.env.WATSON_URL,
     });
+
+    const serviceMessage = [];
 
     async function createSessionId() {
         const getSession = await service.createSession({
@@ -31,17 +33,18 @@ const startSession = (message) => {
             }
         }).then(res => {
             // console.log(JSON.stringify(res, null, 2));
-            console.log(res.result.output.generic);
-            return JSON.stringify(res, null, 2);
+            // console.log(res.result.output.generic);
+            serviceMessage.push(res.result.output.generic);
         })
             .catch(err => {
                 console.log(err);
             });
 
     }
-    return createSessionId();
+    await createSessionId();
+    return await serviceMessage;
 };
 
 module.exports = {
-    startSession
+    startSession,
 };
