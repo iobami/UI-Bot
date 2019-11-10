@@ -39,7 +39,7 @@ app.post('/webhook', (req, res) => {
 });
 
 // Adds support for GET requests to our webhook
-app.get('/webhook', (req, res) => {
+app.get('/', (req, res) => {
 
     // Your verify token. Should be a random string.
     let VERIFY_TOKEN = process.env.WEBHOOK_TOKEN;
@@ -64,10 +64,6 @@ app.get('/webhook', (req, res) => {
             res.sendStatus(403);
         }
     }
-});
-
-app.get('/', function(req, res){
-    res.sendFile(__dirname + '/index.html');
 });
 
 // createClient();
