@@ -6,8 +6,8 @@ const app = express().use(bodyParser.json());
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-const { startSession, getServiceMessage } = require("./Controllers/sessionController.js");
-const { callSendAPI } = require("./facebookControllers/messageController.js");
+const { startSession } = require("./Controllers/sessionController.js");
+const { handleMessage, handlePostBack } = require("./facebookControllers/messageController.js");
 
 
 const port = process.env.PORT || 5000;
@@ -32,11 +32,14 @@ app.post('/webhook', (req, res) => {
             // will only ever contain one message, so we get index 0
             let webhook_event = entry.messaging[0];
             console.log(webhook_event);
-            const serviceReply = await getServiceMessage(webhook_event.message.text);
-            console.log(JSON.parse(serviceReply).output.generic);
-            JSON.parse(serviceReply).output.generic.forEach(async (generic) => {
-                await callSendAPI(webhook_event.sender.id, generic.text);
-            });
+
+            // Check if the event is a message or postback and
+            // pass the event to the appropriate handler function
+            if (webhook_event.message) {
+                handleMessage(webhook_event.sender.id, webhook_event.message);
+            } else if (webhook_event.postback) {
+                handlePostBack(webhook_event.sender.id, webhook_event.postback);
+            }
         });
 
         // Returns a '200 OK' response to all requests

@@ -1,12 +1,40 @@
 const request = require('request');
+const { getServiceMessage } = require("../Controllers/sessionController.js");
 
-const callSendAPI = (sender_psid) => {
+
+const handleMessage = async (sender_psid, received_message) => {
+
+    let response;
+
+    // Check if the message contains text
+    if (received_message.text) {
+
+        // Create the payload for a basic text message
+        response = {
+            "text": `You sent the message: "${received_message.text}". Now send me an image!`
+        }
+    }
+
+    // Gets response from Watson
+    const serviceReply = await getServiceMessage(received_message.text);
+    console.log(JSON.parse(serviceReply).output.generic);
+
+    // Sends the response message
+    // JSON.parse(serviceReply).output.generic.forEach(async (generic) => {
+    //     await callSendAPI(webhook_event.sender.id, generic.text);
+    // });
+    callSendAPI(sender_psid, response);
+};
+
+const handlePostBack = () => {};
+
+const callSendAPI = (sender_psid, response) => {
     // Construct the message body
     let request_body = {
         "recipient": {
             "id": sender_psid
         },
-        "message": 'Wassup Ayo'
+        "message": response
     };
 
     // Send the HTTP request to the Messenger Platform
@@ -27,5 +55,5 @@ const callSendAPI = (sender_psid) => {
 };
 
 module.exports = {
-    callSendAPI
+    handleMessage, handlePostBack
 };
