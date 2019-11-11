@@ -80,7 +80,7 @@ app.get('/webhook', (req, res) => {
 });
 
 setInterval(function() {
-    http.get("https://ui-bot-1.herokuapp.com");
+    app.get("https://ui-bot-1.herokuapp.com");
 }, 300000);
 
 // createClient();
