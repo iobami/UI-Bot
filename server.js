@@ -23,7 +23,7 @@ app.post('/webhook', (req, res) => {
     if (body.object === 'page') {
 
         // Iterates over each entry - there may be multiple if batched
-        body.entry.forEach( async function(entry) {
+        body.entry.forEach( function(entry) {
 
             // Gets the message. entry.messaging is an array, but
             // will only ever contain one message, so we get index 0
@@ -46,7 +46,9 @@ app.post('/webhook', (req, res) => {
 // Adds support for GET requests to our webhook
 app.get('/webhook', (req, res) => {
 
-    // Your verify token. Should be a random string.
+    // Your verify token. Should be a random string.eMessage(webhook_event.message.text);
+            console.log('=====================================');
+            console.log(serviceReply);
     let VERIFY_TOKEN = process.env.WEBHOOK_TOKEN;
 
     // Parse the query params
