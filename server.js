@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+require('dotenv').config();
 const app = express().use(bodyParser.json());
 
 const http = require('http').createServer(app);
@@ -9,8 +10,6 @@ const { getServiceMessage } = require("./Controllers/sessionController.js");
 
 
 const port = process.env.PORT || 5000;
-
-require('dotenv').config();
 
 const { createConnection } = require("./Controllers/socket.js");
 // const { createClient } = require("./Google Maps/gmaps.js");
