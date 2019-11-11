@@ -1,12 +1,12 @@
 const request = require('request');
 
-const callSendAPI = (sender_psid, message) => {
+const callSendAPI = (sender_psid) => {
     // Construct the message body
     let request_body = {
         "recipient": {
             "id": sender_psid
         },
-        "message": message
+        "message": 'Wassup Ayo'
     };
 
     // Send the HTTP request to the Messenger Platform
@@ -18,7 +18,6 @@ const callSendAPI = (sender_psid, message) => {
     }, (err, res, body) => {
         if (!err) {
             console.log('message sent!');
-            console.log(res);
             console.log('--------------------------');
             console.log(body)
         } else {
