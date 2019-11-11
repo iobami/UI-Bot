@@ -17,13 +17,11 @@ const handleMessage = async (sender_psid, received_message) => {
 
     // Gets response from Watson
     const serviceReply = await getServiceMessage(received_message.text);
-    console.log(JSON.parse(serviceReply).output.generic);
 
     // Sends the response message
-    // JSON.parse(serviceReply).output.generic.forEach(async (generic) => {
-    //     await callSendAPI(webhook_event.sender.id, generic.text);
-    // });
-    callSendAPI(sender_psid, response);
+    JSON.parse(serviceReply).output.generic.forEach(async (generic) => {
+        await callSendAPI(sender_psid, generic.text);
+    });
 };
 
 const handlePostBack = () => {};
