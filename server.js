@@ -6,7 +6,7 @@ const app = express().use(bodyParser.json());
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-const { getServiceMessage } = require("./Controllers/sessionController.js");
+const { startSession, getServiceMessage } = require("./Controllers/sessionController.js");
 const { callSendAPI } = require("./facebookControllers/messageController.js");
 
 
@@ -15,6 +15,8 @@ const port = process.env.PORT || 5000;
 const { createConnection } = require("./Controllers/socket.js");
 // const { createClient } = require("./Google Maps/gmaps.js");
 
+// Get session id for watson
+startSession();
 // Creates the endpoint for our webhook
 app.post('/webhook', (req, res) => {
 
@@ -31,7 +33,7 @@ app.post('/webhook', (req, res) => {
             let webhook_event = entry.messaging[0];
             console.log(webhook_event);
             const serviceReply = await getServiceMessage(webhook_event.message.text);
-            console.log('=====================================');
+            console.log(JSON.parse(serviceReply).output.generic);
             JSON.parse(serviceReply).output.generic.forEach(async (generic) => {
                 await callSendAPI(webhook_event.sender.id, generic.text);
             });
