@@ -7,6 +7,7 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
 const { getServiceMessage } = require("./Controllers/sessionController.js");
+const { callSendAPI } = require("./Facebook Controllers/messageController.js");
 
 
 const port = process.env.PORT || 5000;
@@ -31,7 +32,9 @@ app.post('/webhook', (req, res) => {
             console.log(webhook_event);
             const serviceReply = await getServiceMessage(webhook_event.message.text);
             console.log('=====================================');
-            console.log(serviceReply);
+            JSON.parse(serviceReply).output.generic.forEach(async (generic) => {
+                await callSendAPI(webhook_event.sender.id, generic.text);
+            });
         });
 
         // Returns a '200 OK' response to all requests
