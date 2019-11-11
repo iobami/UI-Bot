@@ -5,6 +5,9 @@ const app = express().use(bodyParser.json());
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
+const { getServiceMessage } = require("./Controllers/sessionController.js");
+
+
 const port = process.env.PORT || 5000;
 
 require('dotenv').config();
@@ -21,14 +24,15 @@ app.post('/webhook', (req, res) => {
     if (body.object === 'page') {
 
         // Iterates over each entry - there may be multiple if batched
-        body.entry.forEach(function(entry) {
+        body.entry.forEach( async function(entry) {
 
             // Gets the message. entry.messaging is an array, but
             // will only ever contain one message, so we get index 0
             let webhook_event = entry.messaging[0];
             console.log(webhook_event);
-            console.log('-----------------------++');
-            console.log(webhook_event.message.text);
+            const serviceReply = await getServiceMessage(webhook_event.message.text);
+            console.log('=====================================');
+            console.log(serviceReply);
         });
 
         // Returns a '200 OK' response to all requests
