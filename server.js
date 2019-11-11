@@ -7,7 +7,7 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
 const { getServiceMessage } = require("./Controllers/sessionController.js");
-const { callSendAPI } = require("./Facebook Controllers/messageController.js");
+const { callSendAPI } = require("./facebookControllers/messageController.js");
 
 
 const port = process.env.PORT || 5000;
