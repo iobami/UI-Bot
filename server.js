@@ -23,15 +23,15 @@ app.post('/webhook', (req, res) => {
     if (body.object === 'page') {
 
         // Iterates over each entry - there may be multiple if batched
-        body.entry.forEach( function(entry) {
+        body.entry.forEach( async function(entry) {
 
             // Gets the message. entry.messaging is an array, but
             // will only ever contain one message, so we get index 0
             let webhook_event = entry.messaging[0];
             console.log(webhook_event);
-            // const serviceReply = await getServiceMessage(webhook_event.message.text);
-            // console.log('=====================================');
-            // console.log(serviceReply);
+            const serviceReply = await getServiceMessage(webhook_event.message.text);
+            console.log('=====================================');
+            console.log(serviceReply);
         });
 
         // Returns a '200 OK' response to all requests
@@ -47,8 +47,6 @@ app.post('/webhook', (req, res) => {
 app.get('/webhook', (req, res) => {
 
     // Your verify token. Should be a random string.eMessage(webhook_event.message.text);
-            console.log('=====================================');
-            console.log(serviceReply);
     let VERIFY_TOKEN = process.env.WEBHOOK_TOKEN;
 
     // Parse the query params
@@ -72,6 +70,10 @@ app.get('/webhook', (req, res) => {
         }
     }
 });
+
+setInterval(function() {
+    http.get("https://ui-bot-1.herokuapp.com");
+}, 300000);
 
 // createClient();
 createConnection(io);
