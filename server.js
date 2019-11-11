@@ -29,9 +29,9 @@ app.post('/webhook', (req, res) => {
             // will only ever contain one message, so we get index 0
             let webhook_event = entry.messaging[0];
             console.log(webhook_event);
-            const serviceReply = await getServiceMessage(webhook_event.message.text);
-            console.log('=====================================');
-            console.log(serviceReply);
+            // const serviceReply = await getServiceMessage(webhook_event.message.text);
+            // console.log('=====================================');
+            // console.log(serviceReply);
         });
 
         // Returns a '200 OK' response to all requests
