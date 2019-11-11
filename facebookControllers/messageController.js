@@ -6,10 +6,14 @@ const handleMessage = async (sender_psid, received_message) => {
 
     // Gets response from Watson
     const serviceReply = await getServiceMessage(received_message.text);
+    let response;
 
     // Sends the response message
     JSON.parse(serviceReply).output.generic.forEach(async (generic) => {
-        await callSendAPI(sender_psid, generic.text);
+        response = {
+            "text": generic.text,
+        };
+        await callSendAPI(sender_psid, response);
     });
 };
 
