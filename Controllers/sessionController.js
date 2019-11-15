@@ -35,10 +35,29 @@ const getServiceMessage = async (message) => {
     await service.message({
         assistantId: process.env.WATSON_ASSISTANT_ID,
         sessionId: sessionIdArray[0],
+        context: {
+            'global': {
+                'system': {
+                    'user_id': 'my_user_id'
+                }
+            },
+            'skills': {
+                'main skill': {
+                    'user_defined': {
+                        'deptName': 'Law',
+                        'deptCutOff': 'dont know',
+                        'facultyName': 'LAW',
+                    }
+                }
+            }
+        },
         input: {
             'message_type': 'text',
-            'text': message
-        }
+            'text': message,
+            'options': {
+                'return_context': true,
+            },
+        },
     }).then(res => {
         // console.log(JSON.stringify(res, null, 2));
         // console.log(res.result.output.generic);
@@ -46,8 +65,7 @@ const getServiceMessage = async (message) => {
         // serviceMessage.push(res.result.output.generic);
     })
         .catch(async err => {
-            console.log(err.body);
-            console.log('++++++++++----------------');
+            console.log(err);
             if (JSON.parse(err.body).code === 404) {
                 let session_id = await startSession();
                 sessionIdArray = [];
@@ -57,8 +75,11 @@ const getServiceMessage = async (message) => {
                     sessionId: session_id,
                     input: {
                         'message_type': 'text',
-                        'text': message
-                    }
+                        'text': message,
+                        'options': {
+                            'return_context': true,
+                        },
+                    },
                 }).then(res => {
                     // console.log(JSON.stringify(res, null, 2));
                     // console.log(res.result.output.generic);

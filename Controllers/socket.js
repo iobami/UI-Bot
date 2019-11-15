@@ -1,4 +1,7 @@
 const { startSession, getServiceMessage } = require("./sessionController.js");
+const { getDeptCutOffResponse } = require("./getDeptCutOffResponse.js");
+const cutMarks = require("../Uni Ibadan Depts/cutoffMarks.js");
+const { fetchCutoff } = require("../Uni Ibadan Depts/fetchDeptCutoff.js");
 
 const createConnection = (io) => {
 
@@ -15,10 +18,36 @@ const createConnection = (io) => {
             // startSession(msg);
             async function message() {
                const [ reply ] = await getServiceMessage(msg);
-               console.log(reply);
+               let newReply = [];
+               console.log('skrrr-------');
+               let checkCutOff = false;
+               const arrayOfEntities = JSON.parse(reply).output.entities;
+               await arrayOfEntities.forEach( async (entityObject) => {
+                   console.log(JSON.parse(reply).output.entities.length);
+                   if (!JSON.parse(reply).output.entities.length) {
+                       return;
+                   }
+                    if (entityObject.entity === 'departments') {
+                        checkCutOff = true;
+                        const matchedCutoff = await fetchCutoff(entityObject.value, cutMarks);
+                        const newReplyObject = [];
+                        await matchedCutoff.forEach((matchedCutoffObject) => {
+                            const resText = `Faculty: ${matchedCutoffObject.faculty} || Department: ${matchedCutoffObject.dept} || Cut-Off ${matchedCutoffObject.cutoff}`;
+                            newReplyObject.push({ response_type: 'text', text: resText });
+                        });
+                        console.log(newReplyObject);
+                        newReply.push(getDeptCutOffResponse(newReplyObject));
+                    }
+                });
                // await io.emit('chat message', reply[0].text);
                 // sending to individual socketid (private message)
-               await io.to(`${socket.id}`).emit('chat message', reply);
+                console.log('Check cutoff: ', checkCutOff);
+                if (checkCutOff === true) {
+                    await newReply[0];
+                    await io.to(`${socket.id}`).emit('chat message', newReply[0]);
+                } else {
+                    await io.to(`${socket.id}`).emit('chat message', reply);
+                }
             }
             return message();
         });
