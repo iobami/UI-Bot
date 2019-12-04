@@ -1,7 +1,7 @@
 const { startSession, getServiceMessage } = require("./sessionController.js");
 const { getDeptCutOffResponse } = require("./getDeptCutOffResponse.js");
 const cutMarks = require("../Uni Ibadan Depts/cutoffMarks.js");
-const { fetchCutoff } = require("../Uni Ibadan Depts/fetchDeptCutoff.js");
+const { fetchCutoff, fetchSchoolFees } = require("../Uni Ibadan Depts/fetchDeptCutoff.js");
 
 const createConnection = (io) => {
 
@@ -18,24 +18,28 @@ const createConnection = (io) => {
             // startSession(msg);
             async function message() {
                const [ reply ] = await getServiceMessage(msg);
-               let newReply = [];
+                const newReply = [];
                console.log('skrrr-------');
-               let checkCutOff = false;
+                let checkCutOff = false;
                const arrayOfEntities = JSON.parse(reply).output.entities;
+               const userDefinedContext = JSON.parse(reply).context.skills[ 'main skill' ].user_defined;
                await arrayOfEntities.forEach( async (entityObject) => {
-                   console.log(JSON.parse(reply).output.entities.length);
                    if (!JSON.parse(reply).output.entities.length) {
                        return;
                    }
-                    if (entityObject.entity === 'departments') {
+                   if ((entityObject.entity === 'departments') && (userDefinedContext.check_tuition_department)) {
+                       checkCutOff = true;
+                       const schoolFees = await fetchSchoolFees(userDefinedContext.check_tuition_department);
+                       newReply.push(getDeptCutOffResponse(schoolFees));
+
+                   } else if (entityObject.entity === 'departments') {
                         checkCutOff = true;
-                        const matchedCutoff = await fetchCutoff(entityObject.value, cutMarks);
+                        let matchedCutoff = await fetchCutoff(entityObject.value, cutMarks);
                         const newReplyObject = [];
                         await matchedCutoff.forEach((matchedCutoffObject) => {
                             const resText = `Faculty: ${matchedCutoffObject.faculty} || Department: ${matchedCutoffObject.dept} || Cut-Off ${matchedCutoffObject.cutoff}`;
                             newReplyObject.push({ response_type: 'text', text: resText });
                         });
-                        console.log(newReplyObject);
                         newReply.push(getDeptCutOffResponse(newReplyObject));
                     }
                 });
