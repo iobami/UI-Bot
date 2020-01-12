@@ -37,7 +37,8 @@ const createConnection = (io) => {
                         let matchedCutoff = await fetchCutoff(entityObject.value, cutMarks);
                         const newReplyObject = [];
                         await matchedCutoff.forEach((matchedCutoffObject) => {
-                            const resText = `Faculty: ${matchedCutoffObject.faculty} || Department: ${matchedCutoffObject.dept} || Cut-Off ${matchedCutoffObject.cutoff}`;
+                            // const resText = `Faculty: ${matchedCutoffObject.faculty} || Department: ${matchedCutoffObject.dept} || Cut-Off ${matchedCutoffObject.cutoff}`;
+                            const resText = `The cut off mark for ${matchedCutoffObject.dept}, in ${matchedCutoffObject.faculty} is ${matchedCutoffObject.cutoff}`;
                             newReplyObject.push({ response_type: 'text', text: resText });
                         });
                         newReply.push(getDeptCutOffResponse(newReplyObject));
