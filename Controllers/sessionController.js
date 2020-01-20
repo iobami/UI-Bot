@@ -13,6 +13,8 @@ let sessionIdArray = [];
 
 const startSession = async () => {
 
+    sessionIdArray = [];
+
     return await service.createSession({
         assistantId: process.env.WATSON_ASSISTANT_ID
     }).then(res => {
@@ -44,9 +46,7 @@ const getServiceMessage = async (message) => {
             'skills': {
                 'main skill': {
                     'user_defined': {
-                        'deptName': 'Law',
                         'deptCutOff': 'dont know',
-                        'facultyName': 'LAW',
                     }
                 }
             }

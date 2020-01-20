@@ -44,9 +44,7 @@ const createConnection = (io) => {
                         newReply.push(getDeptCutOffResponse(newReplyObject));
                     }
                 });
-               // await io.emit('chat message', reply[0].text);
                 // sending to individual socketid (private message)
-                console.log('Check cutoff: ', checkCutOff);
                 if (checkCutOff === true) {
                     await newReply[0];
                     await io.to(`${socket.id}`).emit('chat message', newReply[0]);

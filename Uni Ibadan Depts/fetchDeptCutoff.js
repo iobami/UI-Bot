@@ -25,7 +25,7 @@ const fetchSchoolFees = (dept_name) => {
                     // const num = new Number(value).toLocaleString("en-GB");
                     const parsedNum = parseInt(value, 10);
                     const tuitionFee = parsedNum.toLocaleString("en-GB");
-                    const resText = `For level ${key} FRESHERS, the fee is ${naira} ${tuitionFee}`;
+                    const resText = `For level ${key} FRESHERS in ${deptObject.dept}, ${deptObject.faculty}, the fee is ${naira} ${tuitionFee}`;
                     newReplyObject.push({ response_type: 'text', text: resText });
                 });
             });
@@ -34,7 +34,7 @@ const fetchSchoolFees = (dept_name) => {
                     // const num = new Number(value).toLocaleString("en-GB");
                     const parsedNum = parseInt(value, 10);
                     const tuitionFee = parsedNum.toLocaleString("en-GB");
-                    const resText = `For level ${key} RETURNING students, the fee is ${naira} ${tuitionFee}`;
+                    const resText = `For level ${key} RETURNING students in ${deptObject.dept}, ${deptObject.faculty}, the fee is ${naira} ${tuitionFee}`;
                     newReplyObject.push({ response_type: 'text', text: resText });
                 });
             });

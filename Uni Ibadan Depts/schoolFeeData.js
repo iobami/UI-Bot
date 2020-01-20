@@ -945,7 +945,7 @@ module.exports = [
     },
     {
         faculty: 'Clinical Sciences',
-        dept: 'Medicine & Surgery',
+        dept: 'Medicine and Surgery',
         fees: {
             freshers: [
                 { '100': '22700', },
