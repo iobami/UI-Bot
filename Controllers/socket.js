@@ -1,10 +1,11 @@
 const { startSession, getServiceMessage } = require("./sessionController.js");
 const { getDeptCutOffResponse } = require("./getDeptCutOffResponse.js");
 const cutMarks = require("../Uni Ibadan Depts/cutoffMarks.js");
-const { fetchCutoff, fetchSchoolFees } = require("../Uni Ibadan Depts/fetchDeptCutoff.js");
+const requiredSubjects = require("../Uni Ibadan Depts/requiredSubjectsData.js");
+const { fetchCutoff, fetchSchoolFees, fetchRequiredSubjects } = require("../Uni Ibadan Depts/fetchDeptCutoff.js");
 
 const createConnection = (io) => {
-
+    // console.log(requiredSubjects);
     io.on('connection', async function(socket){
         console.log('a user connected ', socket.id);
         socket.on('disconnect', function(){
@@ -25,6 +26,12 @@ const createConnection = (io) => {
                const userDefinedContext = JSON.parse(reply).context.skills[ 'main skill' ].user_defined;
                await arrayOfEntities.forEach( async (entityObject) => {
                    if (!JSON.parse(reply).output.entities.length) {
+                       return;
+                   }
+                   if ((userDefinedContext.subjects_for_department)) {
+                       checkCutOff = true;
+                       const requiredSubjects = await fetchRequiredSubjects(userDefinedContext.subjects_for_department);
+                       newReply.push(getDeptCutOffResponse(requiredSubjects));
                        return;
                    }
                    if ((entityObject.entity === 'departments') && (userDefinedContext.check_tuition_department)) {

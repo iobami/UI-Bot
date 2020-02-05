@@ -1,4 +1,5 @@
 const tuitionFeesObject = require("./schoolFeeData");
+const requiredSubjectsObject = require("./requiredSubjectsData");
 
 const fetchCutoff = (dept_name, deptCutoff) => {
 
@@ -11,6 +12,24 @@ const fetchCutoff = (dept_name, deptCutoff) => {
     });
 
     return matchedDeptCutoff;
+};
+
+const fetchRequiredSubjects = (dept_name) => {
+
+    let matchedRequiredSubjects = [];
+
+    requiredSubjectsObject.forEach((deptObject) => {
+        if (deptObject.dept.toLowerCase() === dept_name.toLowerCase()) {
+            // const resText = `For Direct Entry: ${deptObject.requirements.direct_entry}`;
+            Object.entries(deptObject.requirements).forEach(([key, value]) => {
+                const resText = `For ${key}: ${value}`;
+                matchedRequiredSubjects.push({ response_type: 'text', text: resText });
+            });
+            // matchedRequiredSubjects.push({ response_type: 'text', text: resText });
+        }
+    });
+
+    return matchedRequiredSubjects;
 };
 
 const fetchSchoolFees = (dept_name) => {
@@ -45,5 +64,5 @@ const fetchSchoolFees = (dept_name) => {
 };
 
 module.exports = {
-    fetchCutoff, fetchSchoolFees
+    fetchCutoff, fetchSchoolFees, fetchRequiredSubjects
 };
