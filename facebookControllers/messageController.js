@@ -36,22 +36,9 @@ const handleMessage = async (sender_psid, received_message) => {
         //         ]
         //     };
         // }
-        response = {
+        await response = {
             "text": generic.text,
-            "quick_replies":[
-                {
-                    "content_type":"text",
-                    "title":"Red",
-                    "payload":"Good looking out red",
-                    "image_url":"http://example.com/img/red.png"
-                },
-                {
-                    "content_type":"text",
-                    "title":"Green",
-                    "payload":"Good looking out Green",
-                    "image_url":"http://example.com/img/green.png"
-                }
-            ]
+            "quick_replies": getQuickReplies(generic.options)
         };
         console.log(response);
         await callSendAPI(sender_psid, response);
@@ -59,6 +46,22 @@ const handleMessage = async (sender_psid, received_message) => {
 };
 
 const handlePostBack = () => {};
+
+const getQuickReplies = async (options) => {
+    const response = [];
+    await options.forEach((optionObject) => {
+        response.push(
+            {
+                "content_type":"text",
+                "title": optionObject.label,
+                "payload": optionObject.value.input.text,
+            },
+        );
+    });
+    console.log('testing getQR');
+    console.log(response);
+    return response;
+};
 
 const callSendAPI = (sender_psid, response) => {
     // Construct the message body
