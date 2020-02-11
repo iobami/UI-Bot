@@ -6,6 +6,8 @@ const handleMessage = async (sender_psid, received_message) => {
 
     // Gets response from Watson
     const serviceReply = await getServiceMessage(received_message.text);
+    console.log(serviceReply);
+    console.log('here to test FB');
     let response;
 
     // Sends the response message
@@ -13,6 +15,7 @@ const handleMessage = async (sender_psid, received_message) => {
         response = {
             "text": generic.text,
         };
+        console.log(response);
         await callSendAPI(sender_psid, response);
     });
 };

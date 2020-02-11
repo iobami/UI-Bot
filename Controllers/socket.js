@@ -24,6 +24,7 @@ const createConnection = (io) => {
                 let checkCutOff = false;
                const arrayOfEntities = JSON.parse(reply).output.entities;
                const userDefinedContext = JSON.parse(reply).context.skills[ 'main skill' ].user_defined;
+               const userDefinedOutput = JSON.parse(reply).output.user_defined;
                await arrayOfEntities.forEach( async (entityObject) => {
                    if (!JSON.parse(reply).output.entities.length) {
                        return;
@@ -39,7 +40,7 @@ const createConnection = (io) => {
                        const schoolFees = await fetchSchoolFees(userDefinedContext.check_tuition_department);
                        newReply.push(getDeptCutOffResponse(schoolFees));
 
-                   } else if (entityObject.entity === 'departments') {
+                   } else if ((entityObject.entity === 'departments') && (userDefinedOutput.getCutOffMark)) {
                         checkCutOff = true;
                         let matchedCutoff = await fetchCutoff(entityObject.value, cutMarks);
                         const newReplyObject = [];
