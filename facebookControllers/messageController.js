@@ -54,8 +54,8 @@ const handleMessage = async (sender_psid, received_message) => {
                     ]
         };
         console.log(response);
-        const qr = getQuickReplies(generic.options);
-        console.log(qr);
+        // const qr = getQuickReplies(generic.options);
+        // console.log(qr);
         await callSendAPI(sender_psid, response);
     });
 };
