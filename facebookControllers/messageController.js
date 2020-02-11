@@ -19,6 +19,7 @@ const handleMessage = async (sender_psid, received_message) => {
         }
         if (generic.options) {
             response = {
+                "text": generic.text,
                 "quick_replies":[
                     {
                         "content_type":"text",
