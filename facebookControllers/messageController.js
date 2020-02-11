@@ -12,46 +12,47 @@ const handleMessage = async (sender_psid, received_message) => {
 
     // Sends the response message
     JSON.parse(serviceReply).output.generic.forEach(async (generic) => {
-        if (generic.text) {
-            response = {
-                "text": generic.text,
-            };
-        }
-        if (generic.options) {
-            response = {
-                "text": generic.text,
-                "quick_replies":[
-                    {
-                        "content_type":"text",
-                        "title":"Red",
-                        "payload":"Good looking out red",
-                        "image_url":"http://example.com/img/red.png"
-                    },
-                    {
-                        "content_type":"text",
-                        "title":"Green",
-                        "payload":"Good looking out Green",
-                        "image_url":"http://example.com/img/green.png"
-                    }
-                ]
-            };
-        }
-        // response = {
-        //     "text": generic.text,
-        //     "quick_replies":[
-        //         {
-        //             "content_type":"text",
-        //             "title":"Red",
-        //             "payload":"Good looking out red",
-        //             "image_url":"http://example.com/img/red.png"
-        //         },{
-        //             "content_type":"text",
-        //             "title":"Green",
-        //             "payload":"Good looking out Green",
-        //             "image_url":"http://example.com/img/green.png"
-        //         }
-        //     ]
-        // };
+        // if (generic.text) {
+        //     await response = {
+        //         "text": generic.text,
+        //     };
+        // }
+        // if (generic.options) {
+        //     await response = {
+        //         "text": generic.text,
+        //         "quick_replies":[
+        //             {
+        //                 "content_type":"text",
+        //                 "title":"Red",
+        //                 "payload":"Good looking out red",
+        //                 "image_url":"http://example.com/img/red.png"
+        //             },
+        //             {
+        //                 "content_type":"text",
+        //                 "title":"Green",
+        //                 "payload":"Good looking out Green",
+        //                 "image_url":"http://example.com/img/green.png"
+        //             }
+        //         ]
+        //     };
+        // }
+        response = {
+            "text": generic.text,
+            "quick_replies":[
+                {
+                    "content_type":"text",
+                    "title":"Red",
+                    "payload":"Good looking out red",
+                    "image_url":"http://example.com/img/red.png"
+                },
+                {
+                    "content_type":"text",
+                    "title":"Green",
+                    "payload":"Good looking out Green",
+                    "image_url":"http://example.com/img/green.png"
+                }
+            ]
+        };
         console.log(response);
         await callSendAPI(sender_psid, response);
     });
