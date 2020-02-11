@@ -36,7 +36,7 @@ const handleMessage = async (sender_psid, received_message) => {
         //         ]
         //     };
         // }
-        await response = {
+        response = {
             "text": generic.text,
             "quick_replies": getQuickReplies(generic.options)
         };
