@@ -38,9 +38,24 @@ const handleMessage = async (sender_psid, received_message) => {
         // }
         response = {
             "text": generic.text,
-            "quick_replies": getQuickReplies(generic.options)
+            "quick_replies": [
+                        {
+                            "content_type":"text",
+                            "title":"Red",
+                            "payload":"Good looking out red",
+                            "image_url":"http://example.com/img/red.png"
+                        },
+                        {
+                            "content_type":"text",
+                            "title":"Green",
+                            "payload":"Good looking out Green",
+                            "image_url":"http://example.com/img/green.png"
+                        }
+                    ]
         };
         console.log(response);
+        const qr = getQuickReplies(generic.options);
+        console.log(qr);
         await callSendAPI(sender_psid, response);
     });
 };
